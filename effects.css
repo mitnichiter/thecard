@@ -1,7 +1,7 @@
 /* effects.css - Add a grainy, glowy, textured look to the site */
 
 :root {
-  --glow-color: #ff0037;
+  --glow-color: #c0c0ff;
 }
 
 body {
