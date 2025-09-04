@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Retro Beats",
+    "artist": "Synthwave Kid",
+    "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    "coverArtUrl": "https://picsum.photos/seed/retro/200"
+  },
+  {
+    "title": "Cybernetic Dreams",
+    "artist": "Neon Runner",
+    "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+    "coverArtUrl": "https://picsum.photos/seed/cyber/200"
+  },
+  {
+    "title": "Future Funk",
+    "artist": "Datastream",
+    "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3",
+    "coverArtUrl": "https://picsum.photos/seed/future/200"
+  }
+]
