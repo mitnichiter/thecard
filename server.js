@@ -9,7 +9,12 @@ const PORT = process.env.PORT || 3000;
 // --- Middleware ---
 app.use(cors());
 
+// This is the standard way to serve all static files (css, js, images) 
+// from the root directory. It's more efficient and robust.
+app.use(express.static(__dirname));
+
 // --- API Route ---
+// This route will be matched before the catch-all below.
 app.get('/api/playlist', (req, res) => {
   const playlistPath = path.join(__dirname, 'playlist.json');
   fs.readFile(playlistPath, 'utf8', (err, data) => {
@@ -18,8 +23,7 @@ app.get('/api/playlist', (req, res) => {
       return res.status(500).json({ error: 'Failed to read playlist data.' });
     }
     try {
-      const playlist = JSON.parse(data);
-      res.json(playlist);
+      res.json(JSON.parse(data));
     } catch (parseError) {
       console.error("Error parsing playlist.json:", parseError);
       return res.status(500).json({ error: 'Playlist data is not valid JSON.' });
@@ -27,16 +31,10 @@ app.get('/api/playlist', (req, res) => {
   });
 });
 
-// --- Static Asset Routes ---
-// Explicitly serve each static file your application needs.
-app.get('/style.css', (req, res) => res.sendFile(path.join(__dirname, 'style.css')));
-app.get('/effects.css', (req, res) => res.sendFile(path.join(__dirname, 'effects.css')));
-app.get('/client.js', (req, res) => res.sendFile(path.join(__dirname, 'client.js')));
-app.get('/p.jpg', (req, res) => res.sendFile(path.join(__dirname, 'p.jpg')));
-
-// --- Root and Catch-All Route ---
-// Any request that isn't for the API or a known static file will serve the main app.
-app.get('*', (req, res) => {
+// --- SPA Catch-All Route ---
+// For any other GET request, serve the index.html file.
+// This is the correct way to implement a catch-all for a single-page app.
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
