@@ -7,16 +7,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- Middleware ---
-// Enable Cross-Origin Resource Sharing
 app.use(cors());
-// Serve static files (HTML, CSS, JS, images) from the current directory
-app.use(express.static(__dirname));
 
-// --- API Routes ---
-// Endpoint to serve the playlist data
+// --- API Route ---
 app.get('/api/playlist', (req, res) => {
   const playlistPath = path.join(__dirname, 'playlist.json');
-
   fs.readFile(playlistPath, 'utf8', (err, data) => {
     if (err) {
       console.error("Error reading playlist.json:", err);
@@ -32,8 +27,20 @@ app.get('/api/playlist', (req, res) => {
   });
 });
 
+// --- Static Asset Routes ---
+// Explicitly serve each static file your application needs.
+app.get('/style.css', (req, res) => res.sendFile(path.join(__dirname, 'style.css')));
+app.get('/effects.css', (req, res) => res.sendFile(path.join(__dirname, 'effects.css')));
+app.get('/client.js', (req, res) => res.sendFile(path.join(__dirname, 'client.js')));
+app.get('/p.jpg', (req, res) => res.sendFile(path.join(__dirname, 'p.jpg')));
+
+// --- Root and Catch-All Route ---
+// Any request that isn't for the API or a known static file will serve the main app.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // --- Server Activation ---
 app.listen(PORT, () => {
   console.log(`Server is running and listening on port ${PORT}`);
-  console.log(`Access the player at http://localhost:${PORT}`);
 });
