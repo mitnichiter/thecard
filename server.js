@@ -7,24 +7,23 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- Middleware ---
-// Enable Cross-Origin Resource Sharing
 app.use(cors());
-// Serve static files (HTML, CSS, JS, images) from the current directory
+
+// Serve static files (css, js, images) from the root directory.
+// This will automatically handle requests for /style.css, /client.js, etc.
 app.use(express.static(__dirname));
 
-// --- API Routes ---
-// Endpoint to serve the playlist data
+// --- API Route ---
+// This route is checked before the catch-all.
 app.get('/api/playlist', (req, res) => {
   const playlistPath = path.join(__dirname, 'playlist.json');
-
   fs.readFile(playlistPath, 'utf8', (err, data) => {
     if (err) {
       console.error("Error reading playlist.json:", err);
       return res.status(500).json({ error: 'Failed to read playlist data.' });
     }
     try {
-      const playlist = JSON.parse(data);
-      res.json(playlist);
+      res.json(JSON.parse(data));
     } catch (parseError) {
       console.error("Error parsing playlist.json:", parseError);
       return res.status(500).json({ error: 'Playlist data is not valid JSON.' });
@@ -32,8 +31,14 @@ app.get('/api/playlist', (req, res) => {
   });
 });
 
+// --- SPA Catch-All Route ---
+// This uses a regular expression to match all other GET requests.
+// It serves the main app, and must be the LAST GET route.
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // --- Server Activation ---
 app.listen(PORT, () => {
   console.log(`Server is running and listening on port ${PORT}`);
-  console.log(`Access the player at http://localhost:${PORT}`);
 });
