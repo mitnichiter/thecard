@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // --- Middleware ---
 app.use(cors());
 
-// Serve static files (css, js, images) from the root directory.
+// Serve static files (css, js, images) from the root directory
 app.use(express.static(__dirname));
 
 // --- API Route ---
@@ -30,8 +30,8 @@ app.get('/api/playlist', (req, res) => {
 });
 
 // --- SPA Catch-All Route ---
-// Must be the LAST GET route
-app.get('*', (req, res) => {
+// This must come last: send index.html for all other routes
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
